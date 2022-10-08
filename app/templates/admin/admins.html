@@ -1,0 +1,87 @@
+{% extends 'admin/master.html' %}
+
+{% block title %}
+Admins
+{% endblock %}
+
+{% block body %}
+
+<!-- Page Title -->
+<h4 class="fortweet-title mb-5"> Administrators </h4>
+
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+  {% if errors %}
+    {% for message in errors %}
+      <!-- Messages -->
+      <div class="row justify-content-center align-items-center">
+        <div class="col-8 mx-auto">
+            <!-- Error Message -->
+            <div class="alert alert-danger alert-dismissible fade show mb-5" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% with success = get_flashed_messages(category_filter=["success"]) %}
+  {% if success %}
+    {% for message in success %}
+      <!-- Messages -->
+      <div class="row justify-content-center align-items-center">
+        <div class="col-8 mx-auto">
+            <!-- Error Message -->
+            <div class="alert alert-success alert-dismissible fade show mb-5" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="row">
+  <div class="col-md-8 mx-auto">
+
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+          <th scope="col">Username</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for admin in admins %}
+              <tr>
+                  <td scope="row">{{ loop.index }}</td>
+                  <td>{{ admin.email }}</td>
+                  <td>{{ admin.username }}</td>
+                  <td>
+                      <form action="/admin/remove/{{admin.id}}" method="POST">
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                      </form>
+                  </td>
+              </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="mt-5">
+      <form action="{{ url_for('admin.admin_add_get')}}" method="GET">
+        <button type="submit" class="btn btn-dark float-right">Add Admin</button>
+      </form>
+    </div>
+
+  </div>
+</div>   
+
+{% endblock %}
